@@ -1,2 +1,7 @@
 @import "../../palette.scss";
 
+.aside {
+  width: 256px;
+  background-color: yellow;
+  flex-shrink: 0;
+}
