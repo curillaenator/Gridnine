@@ -8,8 +8,6 @@ import Loader from "./Components/Loader/Loader";
 import "./App.scss";
 
 const App = (props) => {
-  // console.log(props);
-
   const getFlights = () => props.flightsFromJSON();
   useEffect(() => getFlights(), []);
 

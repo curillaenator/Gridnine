@@ -2,7 +2,7 @@ import Flight from "./Flight/Flight";
 import styles from "./main.module.scss";
 
 const Main = (props) => {
-  console.log(props);
+//   console.log(props);
   return (
     <div className={styles.main}>
       <Flight />
