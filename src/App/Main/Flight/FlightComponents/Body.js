@@ -3,10 +3,13 @@ import clock from "../../../../Assets/Images/clock.png";
 import styles from "../flight.module.scss";
 
 const Cities = (props) => {
+
+  const city = props.city ? props.city.caption : props.airport.caption;
+
   return (
     <div className={styles.city}>
       <h3>
-        {props.city.caption}, {props.airport.caption}
+        {city}, {props.city && props.airport.caption}
       </h3>
       <p>({props.airport.uid})</p>
     </div>
@@ -14,6 +17,11 @@ const Cities = (props) => {
 };
 
 const Legs = (props) => {
+  const arrival = (prop) =>
+    props.segments.length > 1
+      ? props.segments[1][prop]
+      : props.segments[0][prop];
+
   return (
     <div className={styles.legs}>
       {/* DEPARTURE */}
@@ -24,16 +32,22 @@ const Legs = (props) => {
       <img src={arrow} alt="до" />
       {/* ARRIVAL */}
       <Cities
-        airport={props.segments[1].arrivalAirport}
-        city={props.segments[1].arrivalCity}
+        airport={arrival("arrivalAirport")}
+        city={arrival("arrivalCity")}
       />
     </div>
   );
 };
 
 const Time = (props) => {
+  const isTransfer = props.segments.length > 1 ? true : false;
+
   const departs = new Date(props.segments[0].departureDate);
-  const arrives = new Date(props.segments[1].arrivalDate);
+  const arrives = new Date(
+    props.segments.length > 1
+      ? props.segments[1].arrivalDate
+      : props.segments[0].arrivalDate
+  );
 
   const opts = {
     time: { hour: "numeric", minute: "numeric" },
@@ -68,19 +82,18 @@ const Time = (props) => {
           </div>
         </div>
 
-        {props.isTransfer && (
-          <div className={styles.transit}>
-            <p>1 пересадка</p>
-            <div className={styles.line}></div>
-          </div>
-        )}
+        <div className={styles.transit}>
+          {isTransfer ? <p>1 пересадка</p> : <p>прямой</p>}
+
+          <div className={styles.line}></div>
+        </div>
       </div>
     </>
   );
 };
 
 const Info = (props) => {
-//   console.log(props.segments[0].airline.caption);
+  //   console.log(props.segments[0].airline.caption);
   //   console.log(props.segments[1].airline);
   return (
     <div className={styles.info}>
@@ -90,8 +103,6 @@ const Info = (props) => {
 };
 
 const Card = (props) => {
-  //   console.log(props.seg);
-
   return (
     <div className={styles.body} key={props.seg}>
       <div className={styles.flight}>
@@ -108,7 +119,6 @@ const Card = (props) => {
 };
 
 const Body = (props) => {
-  //   console.log(props);
   return props.legs.map((seg, i) => <Card seg={seg} key={i} />);
 };
 export default Body;

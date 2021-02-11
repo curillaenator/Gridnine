@@ -1,7 +1,7 @@
 @import "../../../palette.scss";
 
 .flightCard {
-    margin-bottom: 28px;
+  margin-bottom: 28px;
   .top {
     display: flex;
     align-items: center;
@@ -94,6 +94,7 @@
           display: flex;
           justify-content: center;
           position: relative;
+          min-height: 17.5px;
           .line {
             position: absolute;
             top: 50%;
