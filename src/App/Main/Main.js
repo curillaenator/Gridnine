@@ -1,9 +1,12 @@
+import { useEffect } from "react";
 import Flight from "./Flight/Flight";
 import Loader from "../Components/Loader/Loader";
 import styles from "./main.module.scss";
 
 const LoadMore = (props) => {
-  const handler = () => props.addFlights(props.pageSize, props.pagesLoaded + 1);
+  const { pageSize, pagesLoaded, showMoreFlights, sortedData } = props;
+  const handler = () => showMoreFlights(pageSize, pagesLoaded + 1, sortedData);
+
   return (
     <div className={styles.loadMore}>
       <button className={styles.button} onClick={handler}>
@@ -15,18 +18,22 @@ const LoadMore = (props) => {
 
 const Main = (props) => {
   // console.log(props);
+  const { pageSize, pagesLoaded, showMoreFlights, sortedData } = props;
+  useEffect(() => showMoreFlights(pageSize, pagesLoaded, sortedData), [sortedData]);
+
   return (
-    <div className={styles.main}>
+    <main className={styles.main}>
       {props.flights.map((f, i) => (
         <Flight flight={f} key={f.flightToken} />
       ))}
       {props.isLoading && <Loader />}
       <LoadMore
-        addFlights={props.addFlights}
-        pagesLoaded={props.pagesLoaded}
-        pageSize={props.pageSize}
+        showMoreFlights={showMoreFlights}
+        pagesLoaded={pagesLoaded}
+        pageSize={pageSize}
+        sortedData={sortedData}
       />
-    </div>
+    </main>
   );
 };
 
