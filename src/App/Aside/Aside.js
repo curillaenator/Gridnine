@@ -30,8 +30,8 @@ const Input = (props) => {
   const data = props.filter.byPrice;
   const textHandler = (e) => {
     setInput(e.target.value);
-    if (props.title === "от") data.from = e.target.value;
-    if (props.title === "до") data.to = e.target.value;
+    if (props.title === "от") data.from = +e.target.value;
+    if (props.title === "до") data.to = +e.target.value;
     props.handler(data);
   };
 
@@ -97,8 +97,8 @@ const Aside = (props) => {
         <div className={styles.filterBy}>
           <h3>Фильтровать</h3>
           <div className={styles.input}>
-            <Checkbox title="1-пересадка" value="1" handler={transfer} />
-            <Checkbox title="без пересадок" value="0" handler={transfer} />
+            <Checkbox title="1-пересадка" value="2" handler={transfer} />
+            <Checkbox title="без пересадок" value="1" handler={transfer} />
           </div>
           <h3>Цена</h3>
           <div className={styles.input}>

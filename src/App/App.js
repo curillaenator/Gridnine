@@ -6,7 +6,7 @@ import {
   setSort,
   setPriceFilterData,
   setfilterData,
-  filterBy,
+  showWithFilters,
 } from "../Redux/Reducers/appReducer";
 import {
   sortByPriceIncr,
@@ -32,11 +32,13 @@ const App = (props) => {
 
   const data = {
     data: dataSorted[props.sortOption],
+    dataFiltered: props.dataFiltered,
+    filteredCount: props.filteredCount,
     filterByCarriers: props.filter.byCarriers,
     filterByPrice: props.filter.byPrice,
     filterByTransfer: props.filter.byTransfer,
   };
-  // console.log(filterData);
+  // console.log(data);
 
   if (!props.isInitialized) return <Loader />;
 
@@ -54,10 +56,16 @@ const App = (props) => {
         dataToShow={props.dataToShow}
         pagesLoaded={props.pagesLoaded}
         showMoreFlights={props.showMoreFlights}
+        showWithFilters={props.showWithFilters}
         pageSize={props.pageSize}
         isLoading={props.isLoading}
-        sortedData={props.data} //
+        // dataFiltered={props.dataFiltered}
         data={data}
+
+        // dataFiltered={props.dataFiltered}
+        // filterByCarriers={props.filter.byCarriers}
+        // filterByPrice={props.filter.byPrice}
+        // filterByTransfer={props.filter.byTransfer}
       />
     </div>
   );
@@ -72,8 +80,9 @@ const mstp = (state) => ({
   carriers: state.app.carriers,
   sortOption: state.app.sortOption,
   filter: state.app.filter,
+  filteredCount: state.app.filteredCount,
 
-  data: getUnsorted(state), //
+  dataFiltered: state.app.dataFiltered,
   dataPriceIncr: sortByPriceIncr(state),
   dataPriceDecr: sortByPriceDecr(state),
   dataFlightTime: sortByFlightTime(state),
@@ -83,7 +92,7 @@ export default connect(mstp, {
   flightsFromJSON,
   showMoreFlights,
   setSort,
-  filterBy,
+  showWithFilters,
   setfilterData,
   setPriceFilterData,
 })(App);

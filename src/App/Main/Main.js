@@ -4,8 +4,9 @@ import Loader from "../Components/Loader/Loader";
 import styles from "./main.module.scss";
 
 const LoadMore = (props) => {
-  const { pageSize, pagesLoaded, showMoreFlights, sortedData } = props;
-  const handler = () => showMoreFlights(pageSize, pagesLoaded + 1, sortedData);
+  const { pageSize, pagesLoaded, showMoreFlights, dataFiltered } = props;
+  const handler = () =>
+    showMoreFlights(pageSize, pagesLoaded + 1, dataFiltered);
 
   return (
     <div className={styles.loadMore}>
@@ -17,11 +18,25 @@ const LoadMore = (props) => {
 };
 
 const Main = (props) => {
-  console.log(props.data);
-  const { pageSize, pagesLoaded, showMoreFlights, sortedData, data } = props;
+  const {
+    pageSize,
+    pagesLoaded,
+    showMoreFlights,
+    showWithFilters,
+    data,
+  } = props;
 
-  useEffect(() => showMoreFlights(pageSize, pagesLoaded, sortedData), [
-    sortedData,
+  // console.log(
+  //   data.filterByTransfer.some(
+  //     (t) => +t === data.data[0].flight.legs[0].segments.length
+  //   )
+  // );
+  // console.log(data.filterByTransfer);
+  // console.log(data.data[0].flight.legs[0].segments.length);
+
+  useEffect(() => showWithFilters(data, pageSize, pagesLoaded), [
+    data.data,
+    data.filteredCount,
   ]);
 
   return (
@@ -34,7 +49,7 @@ const Main = (props) => {
         showMoreFlights={showMoreFlights}
         pagesLoaded={pagesLoaded}
         pageSize={pageSize}
-        sortedData={sortedData}
+        dataFiltered={data.dataFiltered} // change to filtered
       />
     </main>
   );
