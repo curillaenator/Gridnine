@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import {
   flightsFromJSON,
@@ -11,7 +11,6 @@ import {
 import {
   sortByPriceIncr,
   sortByPriceDecr,
-  getUnsorted,
   sortByFlightTime,
 } from "../selectors";
 import Aside from "./Aside/Aside";
@@ -38,7 +37,6 @@ const App = (props) => {
     filterByPrice: props.filter.byPrice,
     filterByTransfer: props.filter.byTransfer,
   };
-  // console.log(data);
 
   if (!props.isInitialized) return <Loader />;
 
@@ -51,7 +49,7 @@ const App = (props) => {
         setPriceFilterData={props.setPriceFilterData}
         sortOption={props.sortOption}
         filter={props.filter}
-        dataFiltered={props.dataFiltered}
+        // dataFiltered={props.dataFiltered}
       />
       <Main
         dataToShow={props.dataToShow}
@@ -60,13 +58,7 @@ const App = (props) => {
         showWithFilters={props.showWithFilters}
         pageSize={props.pageSize}
         isLoading={props.isLoading}
-        // dataFiltered={props.dataFiltered}
         data={data}
-
-        // dataFiltered={props.dataFiltered}
-        // filterByCarriers={props.filter.byCarriers}
-        // filterByPrice={props.filter.byPrice}
-        // filterByTransfer={props.filter.byTransfer}
       />
     </div>
   );

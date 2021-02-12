@@ -17,14 +17,14 @@ const RadioBtn = (props) => {
 };
 
 const Checkbox = (props) => {
-  const color = props.disabled ? "#d9d9d9" : "#1b1b1b";
+  // const color = props.disabled ? "#d9d9d9" : "#1b1b1b";
   return (
-    <label style={{ color: color }}>
+    <label>
       <input
         type="checkbox"
         onChange={props.handler}
         value={props.value}
-        disabled={props.disabled}
+        // disabled={props.disabled}
       />
       {props.title}
     </label>
@@ -50,33 +50,17 @@ const Input = (props) => {
 };
 
 const Aside = (props) => {
-  // console.log(props);
-
   const handleRadio = (e) => {
     props.setSort(e.target.value);
   };
 
-  const transfer = (e) => {
-    props.setfilterData(
-      "byTransfer",
-      props.filter,
-      e.target.value,
-      e.target.checked
-    );
+  const checkboxHandler = (by) => (e) => {
+    props.setfilterData(by, props.filter, e.target.value, e.target.checked);
   };
 
-  const carriers = (e) => {
-    props.setfilterData(
-      "byCarriers",
-      props.filter,
-      e.target.value,
-      e.target.checked
-    );
-  };
-
-  const filteredCarriers = [
-    ...new Set(props.dataFiltered.map((f) => f.flight.carrier.caption)),
-  ];
+  // const filteredCarriers = [
+  //   ...new Set(props.dataFiltered.map((f) => f.flight.carrier.caption)),
+  // ];
 
   return (
     <aside className={styles.aside}>
@@ -107,8 +91,16 @@ const Aside = (props) => {
         <div className={styles.filterBy}>
           <h3>Фильтровать</h3>
           <div className={styles.input}>
-            <Checkbox title="1-пересадка" value="2" handler={transfer} />
-            <Checkbox title="без пересадок" value="1" handler={transfer} />
+            <Checkbox
+              title="1-пересадка"
+              value="2"
+              handler={checkboxHandler("byTransfer")}
+            />
+            <Checkbox
+              title="без пересадок"
+              value="1"
+              handler={checkboxHandler("byTransfer")}
+            />
           </div>
           <h3>Цена</h3>
           <div className={styles.input}>
@@ -130,8 +122,8 @@ const Aside = (props) => {
                 title={c}
                 key={c}
                 value={c}
-                handler={carriers}
-                disabled={!filteredCarriers.includes(c)}
+                handler={checkboxHandler("byCarriers")}
+                // disabled={!filteredCarriers.includes(c)}
               />
             ))}
           </div>

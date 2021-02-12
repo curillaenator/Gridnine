@@ -15,7 +15,7 @@ const SET_FILTERED_COUNT = "appReducer/SET_FILTERED_COUNT";
 
 const initialState = {
   isInitialized: false,
-  isLoading: false,
+  isLoading: true,
   pagination: {
     pageSize: 10,
     pagesLoaded: 1,
@@ -102,9 +102,9 @@ export const flightsFromJSON = () => (dispatch) => {
   });
 };
 
-const pageFilter = (data, pageSize, pagesLoaded) => {
-  const upper = pageSize * pagesLoaded;
-  const lower = pageSize * pagesLoaded - pageSize;
+const pageFilter = (data, pSize, pLoaded) => {
+  const upper = pSize * pLoaded;
+  const lower = pSize * pLoaded - pSize;
   return data.filter((f, i) => i < upper && i >= lower);
 };
 
@@ -136,45 +136,42 @@ export const setPriceFilterData = (data) => (dispatch) => {
 };
 
 const filter = (data) => {
-  let filteredByCarrier = null;
-  let filteredByPrice = null;
-  let filteredByTransfer = null;
+  let byCarrier = null;
+  let byPrice = null;
+  let byTransfer = null;
 
   data.filterByCarriers.length === 0
-    ? (filteredByCarrier = data.data)
-    : (filteredByCarrier = data.data.filter((f) =>
+    ? (byCarrier = data.data)
+    : (byCarrier = data.data.filter((f) =>
         data.filterByCarriers.some((k) => k === f.flight.carrier.caption)
       ));
 
   data.filterByPrice.from === null ||
   data.filterByPrice.to === null ||
   data.filterByPrice.from >= data.filterByPrice.to
-    ? (filteredByPrice = filteredByCarrier)
-    : (filteredByPrice = filteredByCarrier.filter((f) => {
-        // debugger;
-        return (
+    ? (byPrice = byCarrier)
+    : (byPrice = byCarrier.filter(
+        (f) =>
           +f.flight.price.total.amount > data.filterByPrice.from &&
           +f.flight.price.total.amount < data.filterByPrice.to
-        );
-      }));
+      ));
 
   data.filterByTransfer.length > 0
-    ? (filteredByTransfer = filteredByPrice.filter((f) =>
+    ? (byTransfer = byPrice.filter((f) =>
         data.filterByTransfer.some(
           (t) =>
             +t === f.flight.legs[0].segments.length &&
             +t === f.flight.legs[1].segments.length
         )
       ))
-    : (filteredByTransfer = filteredByPrice);
+    : (byTransfer = byPrice);
 
-  return filteredByTransfer;
+  return byTransfer;
 };
 
 export const showWithFilters = (data, pSize, pLoaded) => (dispatch) => {
   dispatch(clearflightsToShow());
   dispatch(handlePagesLoaded(1));
-
-  dispatch(filteredFlights(filter(data))); 
-  dispatch(showMoreFlights(pSize, pLoaded, filter(data))); 
+  dispatch(filteredFlights(filter(data)));
+  dispatch(showMoreFlights(pSize, pLoaded, filter(data)));
 };

@@ -8,9 +8,15 @@ const LoadMore = (props) => {
   const handler = () =>
     showMoreFlights(pageSize, pagesLoaded + 1, dataFiltered);
 
+  const buttonStyle = props.disabled ? styles.buttonDis : styles.button;
+
   return (
     <div className={styles.loadMore}>
-      <button className={styles.button} onClick={handler}>
+      <button
+        className={buttonStyle}
+        onClick={handler}
+        disabled={props.disabled}
+      >
         Показать еще
       </button>
     </div>
@@ -31,22 +37,31 @@ const Main = (props) => {
     data.filteredCount,
   ]);
 
+  const buttonDisabled =
+    props.dataToShow.length === 0 ||
+    props.dataToShow.length === data.data.length ||
+    props.dataToShow.length === data.dataFiltered.length;
+
   return (
     <main className={styles.main}>
-      {props.dataToShow.length === 0 && (
+      {props.dataToShow.length === 0 && !props.isLoading && (
         <div className={styles.notfound}>
           <h2>Не найдено</h2>
         </div>
       )}
+
       {props.dataToShow.map((f, i) => (
         <Flight flight={f} key={f.flightToken} />
       ))}
+
       {props.isLoading && <Loader />}
+
       <LoadMore
         showMoreFlights={showMoreFlights}
         pagesLoaded={pagesLoaded}
         pageSize={pageSize}
-        dataFiltered={data.dataFiltered} // change to filtered
+        dataFiltered={data.dataFiltered}
+        disabled={buttonDisabled}
       />
     </main>
   );
