@@ -3,9 +3,7 @@ import { api } from "../../api";
 const INITIALIZE = "appReducer/INITIALIZE";
 const IS_LOADING = "appReducer/IS_LOADING";
 const STORE_FLIGHTS = "appReducer/STORE_FLIGHTS";
-
 const FILTERED_FLIGHTS = "appReducer/UPDATE_FLIGHTS";
-
 const FLIGHTS_TO_SHOW = "appReducer/FLIGHTS_TO_SHOW";
 const PAGESLOADED = "appReducer/PAGESLOADED";
 const STORE_CARRIERS = "appReducer/STORE_CARRIERS";
@@ -80,15 +78,12 @@ export const app = (state = initialState, action) => {
 const initialize = (init) => ({ type: INITIALIZE, init });
 const isLoading = (load) => ({ type: IS_LOADING, load });
 const storeFlights = (data) => ({ type: STORE_FLIGHTS, data });
-
 const filteredFlights = (data) => ({ type: FILTERED_FLIGHTS, data });
-
 const flightsToShow = (show) => ({ type: FLIGHTS_TO_SHOW, show });
 const clearflightsToShow = () => ({ type: CLEAR_FLIGHTS_TO_SHOW });
 const handlePagesLoaded = (n) => ({ type: PAGESLOADED, n });
 const storeCarriers = (carriers) => ({ type: STORE_CARRIERS, carriers });
 const sortOption = (option) => ({ type: SET_SORT_OPTION, option });
-
 const priceFilterData = (data) => ({ type: SET_PRICE_FILTER_DATA, data });
 const filterData = (data) => ({ type: SET_FILTER_DATA, data });
 const filterCount = () => ({ type: SET_FILTERED_COUNT });
@@ -123,7 +118,6 @@ export const showMoreFlights = (pSize, pLoaded, data) => (dispatch) => {
 export const setSort = (option) => (dispatch) => {
   dispatch(sortOption(option));
   dispatch(handlePagesLoaded(1));
-  // dispatch(filterCount());
 };
 
 const combineFilterData = (filterArr, item, checked) =>
@@ -164,12 +158,12 @@ const filter = (data) => {
         );
       }));
 
-  // debugger;
-
   data.filterByTransfer.length > 0
     ? (filteredByTransfer = filteredByPrice.filter((f) =>
         data.filterByTransfer.some(
-          (t) => +t === f.flight.legs[0].segments.length
+          (t) =>
+            +t === f.flight.legs[0].segments.length &&
+            +t === f.flight.legs[1].segments.length
         )
       ))
     : (filteredByTransfer = filteredByPrice);
@@ -177,22 +171,10 @@ const filter = (data) => {
   return filteredByTransfer;
 };
 
-// const asd = (data, filteredByPrice) => {
-//   let filteredByTransfer = null;
-//   data.filterByTransfer.length === 0
-//     ? (filteredByTransfer = filteredByPrice.filter((f) =>
-//         data.filterByTransfer.some(
-//           (t) => +t === f.flight.legs[0].segments.length
-//         )
-//       ))
-//     : (filteredByTransfer = filteredByPrice);
-// };
-
-
 export const showWithFilters = (data, pSize, pLoaded) => (dispatch) => {
   dispatch(clearflightsToShow());
   dispatch(handlePagesLoaded(1));
 
-  dispatch(filteredFlights(filter(data))); //change to afterfilter
-  dispatch(showMoreFlights(pSize, pLoaded, filter(data))); //change to afterfilter
+  dispatch(filteredFlights(filter(data))); 
+  dispatch(showMoreFlights(pSize, pLoaded, filter(data))); 
 };

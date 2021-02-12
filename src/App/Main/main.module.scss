@@ -3,7 +3,12 @@
 .main {
   width: 100%;
   padding: 20px 45px 20px 23px;
-  //   background-color: yellowgreen;
+  .notfound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+  }
 }
 .loadMore {
   display: flex;

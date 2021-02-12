@@ -26,14 +26,6 @@ const Main = (props) => {
     data,
   } = props;
 
-  // console.log(
-  //   data.filterByTransfer.some(
-  //     (t) => +t === data.data[0].flight.legs[0].segments.length
-  //   )
-  // );
-  // console.log(data.filterByTransfer);
-  // console.log(data.data[0].flight.legs[0].segments.length);
-
   useEffect(() => showWithFilters(data, pageSize, pagesLoaded), [
     data.data,
     data.filteredCount,
@@ -41,6 +33,11 @@ const Main = (props) => {
 
   return (
     <main className={styles.main}>
+      {props.dataToShow.length === 0 && (
+        <div className={styles.notfound}>
+          <h2>Не найдено</h2>
+        </div>
+      )}
       {props.dataToShow.map((f, i) => (
         <Flight flight={f} key={f.flightToken} />
       ))}
