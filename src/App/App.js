@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   flightsFromJSON,
   showMoreFlights,
   setSort,
+  setPriceFilterData,
+  setfilterData,
   filterBy,
 } from "../Redux/Reducers/appReducer";
 import {
@@ -19,21 +21,22 @@ import Loader from "./Components/Loader/Loader";
 import "./App.scss";
 
 const App = (props) => {
-  // console.log(props);
-  // debugger;
   const initialize = () => props.flightsFromJSON();
   useEffect(() => initialize(), []);
 
-  const sortedData = () => {
-    switch (props.sortOption) {
-      case "priceDecrease":
-        return props.dataPriceDecr;
-      case "flightTime":
-        return props.dataFlightTime;
-      default:
-        return props.dataPriceIncr;
-    }
+  const dataSorted = {
+    priceIncrease: props.dataPriceIncr,
+    priceDecrease: props.dataPriceDecr,
+    flightTime: props.dataFlightTime,
   };
+
+  const data = {
+    data: dataSorted[props.sortOption],
+    filterByCarriers: props.filter.byCarriers,
+    filterByPrice: props.filter.byPrice,
+    filterByTransfer: props.filter.byTransfer,
+  };
+  // console.log(filterData);
 
   if (!props.isInitialized) return <Loader />;
 
@@ -42,34 +45,35 @@ const App = (props) => {
       <Aside
         carriers={props.carriers}
         setSort={props.setSort}
-        filterBy={props.filterBy}
+        setfilterData={props.setfilterData}
+        setPriceFilterData={props.setPriceFilterData}
         sortOption={props.sortOption}
-        sortedData={sortedData()}
-        // selectData={sortedData}
-        filterByCarriers={props.filterByCarriers}
+        filter={props.filter}
       />
       <Main
-        flights={props.flights}
+        dataToShow={props.dataToShow}
         pagesLoaded={props.pagesLoaded}
         showMoreFlights={props.showMoreFlights}
         pageSize={props.pageSize}
         isLoading={props.isLoading}
-        sortedData={sortedData()}
+        sortedData={props.data} //
+        data={data}
       />
     </div>
   );
 };
 
 const mstp = (state) => ({
-  flights: state.app.dataToShow,
+  dataToShow: state.app.dataToShow,
   isInitialized: state.app.isInitialized,
   pageSize: state.app.pagination.pageSize,
   pagesLoaded: state.app.pagination.pagesLoaded,
   isLoading: state.app.isLoading,
   carriers: state.app.carriers,
   sortOption: state.app.sortOption,
-  filterByCarriers: state.app.filterByCarriers,
-  data: getUnsorted(state),
+  filter: state.app.filter,
+
+  data: getUnsorted(state), //
   dataPriceIncr: sortByPriceIncr(state),
   dataPriceDecr: sortByPriceDecr(state),
   dataFlightTime: sortByFlightTime(state),
@@ -80,4 +84,6 @@ export default connect(mstp, {
   showMoreFlights,
   setSort,
   filterBy,
+  setfilterData,
+  setPriceFilterData,
 })(App);

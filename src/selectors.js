@@ -1,14 +1,13 @@
 import { createSelector } from "reselect";
 
 //primitive store querries
-// const getCarrersToFilt = (state) => state.app.filterByCarriers;
 const getFlights = (state) => state.app.data.flights;
 
 //selectors
 export const getUnsorted = createSelector(getFlights, (flights) => flights);
 
 export const sortByPriceIncr = createSelector(
-  getUnsorted,
+  getFlights,
   (flights) =>
     flights &&
     flights
@@ -16,7 +15,6 @@ export const sortByPriceIncr = createSelector(
       .sort(
         (f1, f2) => f1.flight.price.total.amount - f2.flight.price.total.amount
       )
-  //   );
 );
 
 export const sortByPriceDecr = createSelector(
@@ -29,6 +27,7 @@ export const sortByPriceDecr = createSelector(
         (f1, f2) => f2.flight.price.total.amount - f1.flight.price.total.amount
       )
 );
+
 export const sortByFlightTime = createSelector(
   getFlights,
   (flights) =>
@@ -41,4 +40,3 @@ export const sortByFlightTime = createSelector(
           f2.flight.legs.reduce((leg1, leg2) => leg1.duration + leg2.duration)
       )
 );
-// export const filterByCarriers = createSelector();

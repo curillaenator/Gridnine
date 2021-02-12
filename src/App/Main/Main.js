@@ -17,13 +17,16 @@ const LoadMore = (props) => {
 };
 
 const Main = (props) => {
-  // console.log(props);
-  const { pageSize, pagesLoaded, showMoreFlights, sortedData } = props;
-  useEffect(() => showMoreFlights(pageSize, pagesLoaded, sortedData), [sortedData]);
+  console.log(props.data);
+  const { pageSize, pagesLoaded, showMoreFlights, sortedData, data } = props;
+
+  useEffect(() => showMoreFlights(pageSize, pagesLoaded, sortedData), [
+    sortedData,
+  ]);
 
   return (
     <main className={styles.main}>
-      {props.flights.map((f, i) => (
+      {props.dataToShow.map((f, i) => (
         <Flight flight={f} key={f.flightToken} />
       ))}
       {props.isLoading && <Loader />}
