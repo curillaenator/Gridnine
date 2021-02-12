@@ -17,9 +17,15 @@ const RadioBtn = (props) => {
 };
 
 const Checkbox = (props) => {
+  const color = props.disabled ? "#d9d9d9" : "#1b1b1b";
   return (
-    <label>
-      <input type="checkbox" onChange={props.handler} value={props.value} />
+    <label style={{ color: color }}>
+      <input
+        type="checkbox"
+        onChange={props.handler}
+        value={props.value}
+        disabled={props.disabled}
+      />
       {props.title}
     </label>
   );
@@ -67,6 +73,10 @@ const Aside = (props) => {
       e.target.checked
     );
   };
+
+  const filteredCarriers = [
+    ...new Set(props.dataFiltered.map((f) => f.flight.carrier.caption)),
+  ];
 
   return (
     <aside className={styles.aside}>
@@ -116,7 +126,13 @@ const Aside = (props) => {
           <h3>Авиакомпании</h3>
           <div className={styles.input}>
             {props.carriers.map((c) => (
-              <Checkbox title={c} key={c} value={c} handler={carriers} />
+              <Checkbox
+                title={c}
+                key={c}
+                value={c}
+                handler={carriers}
+                disabled={!filteredCarriers.includes(c)}
+              />
             ))}
           </div>
         </div>

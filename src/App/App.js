@@ -51,6 +51,7 @@ const App = (props) => {
         setPriceFilterData={props.setPriceFilterData}
         sortOption={props.sortOption}
         filter={props.filter}
+        dataFiltered={props.dataFiltered}
       />
       <Main
         dataToShow={props.dataToShow}
